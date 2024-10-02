@@ -6,6 +6,8 @@ module.exports = {
             .setDescription('Return the current ping of the server.'),
     
     async execute(interaction) {
-        await interaction.reply(`Ping: ${interaction.guild.ping} ms`);
+        const latency = Date.now() - interaction.createdTimestamp;
+        const apiLatency = Math.round(interaction.client.ws.ping);
+        await interaction.reply(`Latency: ${latency}ms\nAPI Latency: ${apiLatency}ms`);
     },
 };

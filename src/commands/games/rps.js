@@ -33,7 +33,7 @@ module.exports = {
                 iconURL: 'https://i.imgur.com/7H8rGZs.png',
         });
 
-		const response = await interaction.reply({
+	const response = await interaction.reply({
             embeds: [embed1],
 			components: [row],
 		});

@@ -15,7 +15,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(`${target.tag}'s avatar`)
             .setImage(target.displayAvatarURL({ size: 2048 }))
-            .setColor('#00b0f4')
+            .setColor('#7f00ff')
             .setFooter({
                 text: 'Amethyst • a functional discord bot',
                 iconURL: 'https://i.imgur.com/7H8rGZs.png',

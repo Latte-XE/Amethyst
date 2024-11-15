@@ -1,3 +1,5 @@
+// already merge with index.js
+
 const { REST, Routes } = require('discord.js');
 const { clientId, guildId, DISCORD_TOKEN } = require('./config.json');
 const fs = require('node:fs');
@@ -28,7 +30,6 @@ const rest = new REST().setToken(DISCORD_TOKEN);
 	try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
-		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
 			Routes.applicationGuildCommands(clientId, guildId),
 			{ body: commands },
@@ -36,7 +37,6 @@ const rest = new REST().setToken(DISCORD_TOKEN);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
-		// And of course, make sure you catch and log any errors!
 		console.error(error);
 	}
 })();

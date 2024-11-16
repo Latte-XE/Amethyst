@@ -6,14 +6,14 @@ module.exports = {
 		.setDescription('Provides user avatar.')
         .addUserOption( option =>
             option.setName('user')
-                .setDescription('The user you want to display.')
+                .setDescription('The user\'s avatar to display.')
                 .setRequired(true)),  
     
 	async execute(interaction) {
 		const target = interaction.options.getUser('user');
 
         const embed = new EmbedBuilder()
-            .setTitle(`${target.tag}'s avatar`)
+            .setTitle(`${target.username}'s avatar`)
             .setImage(target.displayAvatarURL({ size: 2048 }))
             .setColor('#7f00ff')
             .setFooter({

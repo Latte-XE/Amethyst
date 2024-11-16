@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { getBalance, addBalance } = require('../../helpers/currencyHelper');
 const wait = require('node:timers/promises').setTimeout
 
 module.exports = {
@@ -17,6 +18,12 @@ module.exports = {
         )
         .addIntegerOption(option =>
             option
+                .setName('bet')
+                .setDescription('The bet you place')
+                .setRequired(true)
+        )
+        .addIntegerOption(option =>
+            option
                 .setName('bullet')
                 .setDescription('The number of bullets loaded')
                 .setChoices(
@@ -27,24 +34,22 @@ module.exports = {
                     { name: '5 Bullets', value: 5 }
                 )
                 .setRequired(false)
-        )
-        .addIntegerOption(option =>
-            option
-                .setName('bet')
-                .setDescription('The bet you place')
-                .setRequired(false) // TODO: change this when database is ready
         ),
 
-
     async execute(interaction) {
-        const bet = interaction.options.getInteger('bet') ?? 0; // Use when database is ready
+        if (getBalance(interaction.user.id) <= 0) {
+            await interaction.reply('You are broke, get some cash');
+            return;
+        }
+        
+        const bet = interaction.options.getInteger('bet');
         const bulletCount = interaction.options.getInteger('bullet') ?? 1; // default : 1 bullet
         const gameMode = interaction.options.getInteger('mode');
         const gun = load(bulletCount);
 
         const embed = new EmbedBuilder()
             .setTitle('New russian roulette game started')
-            .setDescription(`:white_check_mark: You've place a bet of $${bet}.`)
+            .setDescription(`:white_check_mark: You've place a bet of $${bet}`)
             .setColor('#7f00ff')
             .setFooter({
                 text: 'Amethyst • a functional discord bot',
@@ -86,7 +91,8 @@ async function singleSpin(interaction, money, container) {
             if (container[i] === 1) {
                 await interaction.channel.send(`<@${userID}> shoot yourself at round ${i + 1}`);
                 await wait(500);
-                await interaction.followUp(`Game over, <@${userID}> lose ${money} dollars.`);
+                await interaction.followUp(`Game over, <@${userID}> lose $${money}`);
+                await addBalance(userID, -money);
                 return;
             }
             else {
@@ -97,7 +103,8 @@ async function singleSpin(interaction, money, container) {
             if (container[i] === 1) {
                 await interaction.channel.send(`The bot shoot itself at round ${i + 1}`);
                 await wait(500);
-                await interaction.followUp(`Game over, <@${userID}> win ${money} dollars.`);
+                await interaction.followUp(`Game over, <@${userID}> win $${money}`);
+                await addBalance(interaction.user.id, money);
                 return;
             }
             else {
@@ -120,7 +127,8 @@ async function reSpin(interaction, money, container) {
             if (container[rnum] === 1) {
                 await interaction.channel.send(`<@${userID}> shoot yourself at round ${turn + 1}`);
                 await wait(500);
-                await interaction.followUp(`Game over, <@${userID}> lose ${money} dollars.`);
+                await interaction.followUp(`Game over, <@${userID}> lose $${money}`);
+                await addBalance(interaction.user.id, -money);
                 return;
             }
             else {
@@ -132,7 +140,8 @@ async function reSpin(interaction, money, container) {
             if (container[rnum] === 1) {
                 await interaction.channel.send(`The bot shoot itself at round ${turn + 1}`);
                 await wait(500);
-                await interaction.followUp(`Game over, <@${userID}> win ${money} dollars.`);
+                await interaction.followUp(`Game over, <@${userID}> win $${money}`);
+                await addBalance(interaction.user.id, money);
                 return;
             }
             else {

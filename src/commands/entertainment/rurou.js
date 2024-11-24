@@ -9,7 +9,7 @@ module.exports = {
         .addIntegerOption(option =>
             option
                 .setName('mode')
-                .setDescription('The mode you desire.')
+                .setDescription('The mode you desired')
                 .setChoices(
                     { name: 'Single Spin', value: 1 },
                     { name: 'Re-spin', value: 2 },
@@ -19,7 +19,7 @@ module.exports = {
         .addIntegerOption(option =>
             option
                 .setName('bet')
-                .setDescription('The bet you place')
+                .setDescription('The amount of balance to bet')
                 .setRequired(true)
         )
         .addIntegerOption(option =>
@@ -48,7 +48,7 @@ module.exports = {
         const gun = load(bulletCount);
 
         const embed = new EmbedBuilder()
-            .setTitle('New russian roulette game started')
+            .setTitle('A new russian roulette game started')
             .setDescription(`:white_check_mark: You've place a bet of $${bet}`)
             .setColor('#7f00ff')
             .setFooter({

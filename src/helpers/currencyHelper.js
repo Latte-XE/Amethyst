@@ -3,21 +3,21 @@ const { Collection } = require('discord.js');
 
 const currency = new Collection();
 
-async function addBalance(id, amount) {
+async function addBalance(id, amount, type = 'balance') {
     const user = currency.get(id);
     if (user) {
-        user.balance += Number(amount);
+        user[type] += Number(amount);
         return user.save();
     }
 
-    const newUser = await Users.create({ user_id: id, balance: amount });
+    const newUser = await Users.create({ user_id: id, balance: amount, bank_balance: amount });
     currency.set(id, newUser);
     return newUser;
 }
 
-function getBalance(id) {
+function getBalance(id, type = 'balance') {
     const user = currency.get(id);
-    return user ? user.balance : 0;
+    return user ? user[type] : 0;
 }
 
 async function loadBalances() {
